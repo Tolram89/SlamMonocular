@@ -1,14 +1,15 @@
-﻿# CMakeList.txt : projet CMake pour SlamMonocular, incluez la source et définissez
-# la logique spécifique au projet ici.
-#
+﻿# Indique où se trouvent les fichiers .h
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-# Ajoutez une source à l'exécutable de ce projet.
-add_executable (SlamMonocular "SlamMonocular.cpp" "SlamMonocular.h")
+# Ajoute les sources situées dans le dossier src/
+add_executable (SlamMonocular 
+    "src/SlamMonocular.cpp" 
+    "src/calibration.cpp"
+)
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET SlamMonocular PROPERTY CXX_STANDARD 20)
 endif()
 
-# TODO: Ajoutez des tests et installez des cibles si nécessaire.
 # Lie les fichiers d'OpenCV à ton exécutable
 target_link_libraries(SlamMonocular ${OpenCV_LIBS})
