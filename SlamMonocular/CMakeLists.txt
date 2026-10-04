@@ -5,7 +5,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 add_executable (SlamMonocular 
     "src/SlamMonocular.cpp" 
     "src/calibration.cpp"
-)
+ "src/preprocessing.cpp" "include/preprocessing.h")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET SlamMonocular PROPERTY CXX_STANDARD 20)
