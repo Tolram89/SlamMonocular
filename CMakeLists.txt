@@ -1,20 +1,18 @@
-﻿# CMakeList.txt : fichier projet CMake de niveau supérieur, effectuez une configuration globale
-# et incluez les sous-projets ici.
-#
-cmake_minimum_required (VERSION 3.10)
+﻿cmake_minimum_required(VERSION 3.20)
 
-# Activez Rechargement à chaud pour les compilateurs MSVC si cela est pris en charge.
-if (POLICY CMP0141)
-  cmake_policy(SET CMP0141 NEW)
-  set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
-endif()
+# Spécifier le toolchain vcpkg à CMake
+set(CMAKE_TOOLCHAIN_FILE "C:/dev/vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE STRING "")
 
-project ("SlamMonocular")
+project(SlamMonocular CXX)
 
-set(OpenCV_DIR "C:/dev/libs/opencv/build")
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Cherche le package OpenCV
 find_package(OpenCV REQUIRED)
 
-# Incluez les sous-projets.
-add_subdirectory ("SlamMonocular")
+file(GLOB_RECURSE SOURCES "src/*.cpp")
+
+add_executable(SlamMonocular ${SOURCES}   "src/SlamSystem.cpp" "src/Camera.cpp" "src/VideoStream.cpp" "src/FrameData.cpp" "src/Preprocessing.cpp" "src/InterestPoint.cpp" "src/Tracking.cpp" "src/Mapping.cpp" "src/Calibration.cpp" "src/UserInterface.cpp" "src/VideoWindow.cpp" "src/MapWindow.cpp" "src/ControlPanel.cpp" "src/Button.cpp")
+
+target_include_directories(SlamMonocular PRIVATE include ${OpenCV_INCLUDE_DIRS})
+target_link_libraries(SlamMonocular PRIVATE ${OpenCV_LIBS})
