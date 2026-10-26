@@ -2,9 +2,9 @@
 #include <opencv2/core/persistence.hpp>
 #include <iostream>
 
-void Camera::setIntrinsics(const cv::Mat& cameramatrix, const cv::Mat& distCoeffs)
+void Camera::setIntrinsics(const cv::Mat& cameraMatrix, const cv::Mat& distCoeffs)
 {
-	this->cameraMatrix = cameramatrix;
+	this->cameraMatrix = cameraMatrix;
 	this->distCoeffs = distCoeffs;
 }
 
@@ -34,7 +34,7 @@ bool Camera::loadIntrinsics(const std::string& fileName)
 	return true;
 }
 
-bool Camera::saveintrinsics(const std::string& fileName)
+bool Camera::saveIntrinsics(const std::string& fileName)
 {
 	cv::FileStorage fs(fileName, cv::FileStorage::WRITE);
 	if (!fs.isOpened()) {
