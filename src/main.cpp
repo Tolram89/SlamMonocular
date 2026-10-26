@@ -13,9 +13,9 @@ int main() {
         cv::Mat dist = cv::Mat::eye(cv::Size(5, 1), CV_64F);
         camera1.setIntrinsics(K, dist);
         std::cout << camera1.isCalibrated() << std::endl;
-        camera1.saveIntrinsics("../config/calibration.yaml");
+        camera1.saveIntrinsics("../../../config/calibration.yaml");
         Camera camera2;
-        camera2.loadIntrinsics("../config/calibration.yaml");
+        camera2.loadIntrinsics("../../../config/calibration.yaml");
         //std::cout << camera2.getCameramatrix() << std::endl;
 
 

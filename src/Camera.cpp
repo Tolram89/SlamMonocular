@@ -4,8 +4,14 @@
 
 void Camera::setIntrinsics(const cv::Mat& cameraMatrix, const cv::Mat& distCoeffs)
 {
-	this->cameraMatrix = cameraMatrix;
-	this->distCoeffs = distCoeffs;
+	if (cameraMatrix.size() == cv::Size(3, 3) &&
+		(distCoeffs.size() == cv::Size(1, 5) ||
+		distCoeffs.size() == cv::Size(5, 1)))
+	{
+		this->cameraMatrix = cameraMatrix.clone();
+		this->distCoeffs = distCoeffs.clone();
+	}
+	
 }
 
 bool Camera::isCalibrated() const
@@ -17,7 +23,7 @@ bool Camera::isCalibrated() const
 		distCoeffs.size() == cv::Size(5, 1))) {
 		return false;
 	}
-	if(cameraMatrix.at<float>(0, 0) <= 0 || cameraMatrix.at<float>(1, 1)<=0)
+	if(cameraMatrix.at<double>(0, 0) <= 0 || cameraMatrix.at<double>(1, 1)<=0)
 		return false;
 	return true;
 }
@@ -42,6 +48,7 @@ bool Camera::saveIntrinsics(const std::string& fileName)
 	}
 	fs << "cameraMatrix" <<  cameraMatrix;
 	fs << "distCoeffs" << distCoeffs;
+	fs.release();
 	fs.release();
 
 	return true;
