@@ -1,41 +1,58 @@
 #include "../include/Camera.hpp"
-
-Camera::Camera()
-{
-	//TODO
-}
+#include <opencv2/core/persistence.hpp>
+#include <iostream>
 
 void Camera::setIntrinsics(const cv::Mat& cameramatrix, const cv::Mat& distCoeffs)
 {
-	//TODO
+	this->cameraMatrix = cameramatrix;
+	this->distCoeffs = distCoeffs;
 }
 
 bool Camera::isCalibrated() const
 {
-	//TODO
-	return false;
+	if(cameraMatrix.empty() || distCoeffs.empty())
+		return false;
+	if (!(cameraMatrix.size() == cv::Size(3, 3) ||
+		distCoeffs.size() == cv::Size(1, 5) ||
+		distCoeffs.size() == cv::Size(5, 1))) {
+		return false;
+	}
+	if(cameraMatrix.at<float>(0, 0) <= 0 || cameraMatrix.at<float>(1, 1)<=0)
+		return false;
+	return true;
 }
 
 bool Camera::loadIntrinsics(const std::string& fileName)
 {
-	//TODO
-	return false;
+	cv::FileStorage fs(fileName, cv::FileStorage::READ);
+	if (!fs.isOpened()) {
+		throw std::runtime_error("Cannot open file for reading : " + fileName);
+	}
+	fs["cameraMatrix"] >> cameraMatrix;
+	fs["distCoeffs"] >> distCoeffs;
+	fs.release();
+	return true;
 }
 
 bool Camera::saveintrinsics(const std::string& fileName)
 {
-	//TODO
-	return false;
+	cv::FileStorage fs(fileName, cv::FileStorage::WRITE);
+	if (!fs.isOpened()) {
+		throw std::runtime_error("Cannot open for writing : " + fileName);
+	}
+	fs << "cameraMatrix" <<  cameraMatrix;
+	fs << "distCoeffs" << distCoeffs;
+	fs.release();
+
+	return true;
 }
 
 const cv::Mat& Camera::getCameramatrix() const
 {
-	// TODO: insérer une instruction return ici
 	return this->cameraMatrix;
 }
 
 const cv::Mat& Camera::getDistCoeffs() const
 {
-	// TODO: insérer une instruction return ici
 	return this->distCoeffs;
 }

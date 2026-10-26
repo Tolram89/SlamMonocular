@@ -6,7 +6,6 @@ private:
 	cv::Mat cameraMatrix;
 	cv::Mat distCoeffs;
 public:
-	Camera();
 
 	void setIntrinsics(const cv::Mat& cameramatrix, const cv::Mat& distCoeffs);
 	bool isCalibrated() const;
