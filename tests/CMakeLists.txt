@@ -1,0 +1,5 @@
+find_package(GTest CONFIG REQUIRED)
+add_executable(camera_tests test_camera.cpp)
+target_link_libraries(camera_tests PRIVATE slam_core GTest::gtest_main)
+include(GoogleTest)
+gtest_discover_tests(camera_tests)
