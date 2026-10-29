@@ -1,9 +1,11 @@
 # pragma once
 #include <opencv2/core/mat.hpp>
+#include <memory>
+#include <vector>
 #include "Camera.hpp"
 
-class FrameData {
-private:
+struct FrameData {
+
 	int id;
 	cv::Mat image;
 	std::vector<cv::KeyPoint> keyPoints;
@@ -12,8 +14,8 @@ private:
 	std::vector<cv::DMatch> matches;
 	std::shared_ptr<Camera> camera;
 
-public:
-	FrameData(int id, const cv::Mat& image, std::vector<cv::KeyPoint> keyPoints);
+
+	FrameData(int id, const cv::Mat& image, std::shared_ptr<Camera> camera);
 
 
 };
