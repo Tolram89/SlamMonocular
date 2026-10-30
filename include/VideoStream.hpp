@@ -8,6 +8,6 @@ public:
 	VideoStream(const std::string& path);
 	VideoStream(int deviceId);
 
-	bool read(cv::Mat& out);
-	bool isOpened();
+	[[nodiscard]] bool read(cv::Mat& out);
+	[[nodiscard]] bool isOpened() const;
 };
