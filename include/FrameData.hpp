@@ -12,10 +12,10 @@ struct FrameData {
 	cv::Mat descriptors;
 	cv::Mat pose;
 	std::vector<cv::DMatch> matches;
-	std::shared_ptr<Camera> camera;
+	std::shared_ptr<const Camera> camera;
 
 
-	FrameData(int id, const cv::Mat& image, std::shared_ptr<Camera> camera);
+	FrameData(int id, const cv::Mat& image, std::shared_ptr<const Camera> camera);
 
 
 };
