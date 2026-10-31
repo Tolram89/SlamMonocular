@@ -1,4 +1,4 @@
-#include "../include/InterestPoints.hpp"
+#include "../include/InterestPointExtractor.hpp"
 
 InterestPoints::InterestPoints(int nfeatures)
 {

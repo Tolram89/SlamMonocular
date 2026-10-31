@@ -1,7 +1,7 @@
 #pragma once
 #include "VideoStream.hpp"
 #include "Preprocessing.hpp"
-#include "InterestPoints.hpp"
+#include "InterestPointExtractor.hpp"
 #include "Calibration.hpp"
 #include "UserInterface.hpp"
 #include "Tracking.hpp"

@@ -8,7 +8,7 @@ find_package(OpenCV REQUIRED)
 
 add_library(slam_core STATIC
     src/Button.cpp src/Calibration.cpp src/Camera.cpp src/ControlPanel.cpp
-    src/FrameData.cpp src/InterestPoints.cpp src/Mapping.cpp src/MapWindow.cpp
+    src/FrameData.cpp src/InterestPointExtractor.cpp src/Mapping.cpp src/MapWindow.cpp
     src/Preprocessing.cpp src/SlamSystem.cpp src/Tracking.cpp
     src/UserInterface.cpp src/VideoStream.cpp src/VideoWindow.cpp)
 target_include_directories(slam_core PUBLIC include ${OpenCV_INCLUDE_DIRS})
