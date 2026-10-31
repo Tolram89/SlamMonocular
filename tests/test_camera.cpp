@@ -56,17 +56,12 @@ TEST(Camera, TestSetIntrinsicsWithIncorrectMatKCoeff) {
 class CameraFixture : public ::testing::Test {
 protected:
 	void SetUp() override {
-		path = (std::filesystem::temp_directory_path() / ::testing::UnitTest::GetInstance()->current_test_info()->name()).string(); ;
+		path = (std::filesystem::temp_directory_path() / ::testing::UnitTest::GetInstance()->current_test_info()->name()).string();
 		
 	}
 	void TearDown() override {
-		if (std::filesystem::remove(path)) {
-			std::cout << "Le fichier a ete supprime avec succes.\n";
-		}
-		else {
-			std::cout << "Le fichier n'existe pas.\n";
-		}
-	}   // appelé même si le test échoue
+		std::filesystem::remove(path);
+	}   
 
 	std::string path = "";
 	Camera camera1;
