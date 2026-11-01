@@ -8,4 +8,5 @@ private:
 public:
 	Button(const std::string& label);
 	bool isPressed() const;
+	void setPressed(bool pressed);
 };
