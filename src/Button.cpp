@@ -1,12 +1,15 @@
 #include "../include/Button.hpp"
 
 Button::Button(const std::string& label)
-{
-	//TODO
-}
+	:label(label), pressed(false)
+{}
 
 bool Button::isPressed() const
 {
-	//TODO
-	return false;
+	return pressed;
+}
+
+void Button::setPressed(bool pressed)
+{
+	this->pressed = pressed;
 }
