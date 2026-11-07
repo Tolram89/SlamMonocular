@@ -3,7 +3,7 @@
 #include <opencv2/opencv.hpp>
 
 Calibration::Calibration(float squareSize, cv::Size patternSize)
-	:squareSize(squareSize), patternSize(patternSize), imageSize(0,0)
+	:squareSize(squareSize), patternSize(patternSize), imageSize(0,0), isImageSizeSet(false)
 {
 
 	if (patternSize.width <= 0 || patternSize.height <= 0)

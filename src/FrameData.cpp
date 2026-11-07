@@ -1,7 +1,7 @@
 #include "../include/FrameData.hpp"
 #include <stdexcept>
 
-FrameData::FrameData(int id, const cv::Mat& image, std::shared_ptr<const Camera> camera)
+FrameData::FrameData(int id, cv::Mat image, std::shared_ptr<const Camera> camera)
 	:id(id), image(image), camera(std::move(camera))
 {
 	if (this->image.empty())
