@@ -1,50 +1,50 @@
 # Architecture Decision Records (ADR) — SlamMonocular
 
-Ce document répertorie les décisions d'architecture majeures et les choix de conception logicielle retenus pour le projet de SLAM monoculaire.
+This document lists the key architectural decisions and software design choices made for the monocular SLAM system project.
 
 ---
 
-## ADR 001 : Séparation entre `Camera` et `Calibration`
+## ADR 001: Separation of `Camera` and `Calibration`
 
-* **Statut :** Accepté
-* **Contexte :** La calibration d'une caméra produit une matrice intrinsèque $K$ et des coefficients de distorsion $D$. Il faut décider où résident ces données et quel composant effectue l'estimation.
-* **Décision :** 
-  * `Camera` est le **modèle d'état géométrique immuable** : il stocke les matrices $K$ et $D$ et gère leur persistance (chargement/sauvegarde YAML).
-  * `Calibration` est un **service d'estimation temporaire** : son unique rôle est de détecter les damiers, d'accumuler les correspondances 2D-3D et de calculer $K$ et $D$ via la méthode de Zhang pour initialiser un objet `Camera`.
-* **Justification (SRP) :** Séparer le stockage du modèle optique du service de calcul permet de respecter le principe de responsabilité unique (Single Responsibility Principle) et d'injecter facilement l'objet `Camera` sous forme de pointeur partagé (`std::shared_ptr<const Camera>`) dans le pipeline sans dépendre de l'outil de calibration.
-
----
-
-## ADR 002 : Patron DTO (Data Transfer Object) pour `FrameData`
-
-* **Statut :** Accepté
-* **Contexte :** Une image au cours du pipeline SLAM est enrichie progressivement (points d'intérêt, descripteurs ORB, pose géométrique, appariements).
-* **Décision :** `FrameData` est conçue comme une structure/classe de données passive (DTO/POD). Elle ne contient aucune méthode de traitement algorithmique.
-* **Justification :** 
-  * Isolation stricte entre les **données** (`FrameData`) et les **traitements** (`Preprocessing`, `InterestPointExtractor`, `Tracking`, `Mapping`).
-  * Facilite le passage de données entre les différents modules et améliore la testabilité unitaire des services.
+* **Status:** Accepted
+* **Context:** Camera calibration yields an intrinsic camera matrix $K$ and distortion coefficients $D$. We need to decide where this state resides and which component performs the estimation.
+* **Decision:** 
+  * `Camera` is the **immutable geometric state model**: it stores matrices $K$ and $D$ and manages their persistence (YAML loading/saving).
+  * `Calibration` is a **temporary estimation service**: its sole responsibility is to detect chessboard patterns, accumulate 2D-3D point correspondences, and compute $K$ and $D$ using Zhang's method to initialize a `Camera` instance.
+* **Rationale (SRP):** Separating the optical model storage from the calculation service satisfies the Single Responsibility Principle (SRP) and allows injecting the `Camera` object as a shared pointer (`std::shared_ptr<const Camera>`) throughout the pipeline without depending on calibration tools.
 
 ---
 
-## ADR 003 : Exclusion de l'action `PAUSE` en V1
+## ADR 002: Data Transfer Object (DTO) Pattern for `FrameData`
 
-* **Statut :** Accepté
-* **Contexte :** Une mise en pause de l'acquisition vidéo a été envisagée pour l'interface utilisateur.
-* **Décision :** L'action `PAUSE` est exclue des fonctionnalités de la version 1 du système.
-* **Justification :** 
-  * Le SLAM monoculaire séquentiel repose sur l'hypothèse de **continuité spatio-temporelle** entre deux images successives $F_{t-1}$ et $F_t$ pour estimer la pose relative.
-  * Si l'utilisateur déplace la caméra pendant une pause, la reprise du flux vidéo provoque un saut spatial rompant la continuité, entraînant un échec d'appariement des descripteurs et une perte de suivi (*tracking loss*).
-  * En l'absence d'un module de relocalisation complet (type Bag-of-Words / BoW), interdire la pause garantit la robustesse du suivi géométrique.
+* **Status:** Accepted
+* **Context:** An image frame is progressively enriched throughout the SLAM pipeline (2D keypoints, ORB descriptors, geometric camera pose, feature matches).
+* **Decision:** `FrameData` is designed as a passive data structure/class (DTO/POD). It contains no algorithmic processing logic.
+* **Rationale:** 
+  * Strict isolation between **data** (`FrameData`) and **processing services** (`Preprocessing`, `InterestPointExtractor`, `Tracking`, `Mapping`).
+  * Facilitates data passing across modules and improves unit testability of individual services.
 
 ---
 
-## ADR 004 : Découplage Vue-Contrôleur via `UserAction` et dépouillement centralisé
+## ADR 003: Exclusion of `PAUSE` Action in V1
 
-* **Statut :** Accepté
-* **Contexte :** Interception des entrées utilisateur (clavier/souris) pour piloter le système SLAM (démarrage, calibration, arrêt).
-* **Décision :** 
-  * Définition d'une énumération d'intents abstraits `UserAction`.
-  * La Vue (`ControlPanel`) effectue l'unique appel à `cv::pollKey()` par frame et met à jour l'état synchrone des objets `Button`.
-* **Justification :** 
-  * Évite la perte d'événements dans la file de messages du système d'exploitation (*OS event pump*) causée par des appels multiples dispersés.
-  * Garantit l'absence de dépendance directe du Contrôleur envers l'API graphique sous-jacente (OpenCV HighGUI).
+* **Status:** Accepted
+* **Context:** Pausing video acquisition was considered for the user interface.
+* **Decision:** The `PAUSE` action is excluded from the version 1 system scope.
+* **Rationale:** 
+  * Sequential monocular SLAM relies on the **spatiotemporal continuity assumption** between successive images $F_{t-1}$ and $F_t$ to estimate relative camera pose.
+  * Moving the camera while paused causes a spatial jump upon resumption, leading to descriptor matching failure and tracking loss.
+  * Without a full place-recognition / relocalization module (e.g., Bag-of-Words / BoW), disallowing pause ensures robust geometric tracking.
+
+---
+
+## ADR 004: View-Controller Decoupling via `UserAction` and Centralized Polling
+
+* **Status:** Accepted
+* **Context:** Intercepting user inputs (keyboard/mouse) to drive the SLAM system (start, calibration, quit).
+* **Decision:** 
+  * Define an abstract intent enumeration `UserAction`.
+  * The View (`ControlPanel`) performs a single `cv::pollKey()` call per frame and updates the synchronous state of `Button` objects.
+* **Rationale:** 
+  * Prevents event loss in the operating system's event queue caused by scattered multiple key-polling calls.
+  * Guarantees zero direct dependency from the Controller onto the underlying GUI framework (OpenCV HighGUI).
