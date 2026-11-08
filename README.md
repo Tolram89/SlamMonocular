@@ -32,7 +32,7 @@ This project focuses on clean software engineering principles, strict separation
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/your-username/slam-monocular.gi
+git clone https://github.com/Tolram89/slam-monocular.git
 cd slam-monocular
 ```
 
