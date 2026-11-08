@@ -18,3 +18,7 @@ target_link_libraries(calibration_tests PRIVATE slam_core GTest::gtest_main)
 gtest_discover_tests(calibration_tests)
 target_compile_definitions(calibration_tests PRIVATE TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/")
 
+#test pour ControlPanel
+add_executable(controlPanel_tests test_controlPanel.cpp)
+target_link_libraries(controlPanel_tests PRIVATE ${OpenCV_LIBS} GTest::gtest_main)
+gtest_discover_tests(controlPanel_tests)

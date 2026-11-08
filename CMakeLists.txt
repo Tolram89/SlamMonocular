@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(OpenCV REQUIRED)
 
 add_library(slam_core STATIC
-    src/Button.cpp src/Calibration.cpp src/Camera.cpp src/ControlPanel.cpp
+     src/Calibration.cpp src/Camera.cpp src/ControlPanel.cpp
     src/FrameData.cpp src/InterestPointExtractor.cpp src/Mapping.cpp src/MapWindow.cpp
     src/Preprocessing.cpp src/SlamSystem.cpp src/Tracking.cpp
     src/UserInterface.cpp src/VideoStream.cpp src/VideoWindow.cpp)

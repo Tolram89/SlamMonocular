@@ -37,14 +37,13 @@ This document lists the key architectural decisions and software design choices 
   * Without a full place-recognition / relocalization module (e.g., Bag-of-Words / BoW), disallowing pause ensures robust geometric tracking.
 
 ---
+## ADR 004: Direct Key Mapping via `UserAction` without `Button` Abstraction
 
-## ADR 004: View-Controller Decoupling via `UserAction` and Centralized Polling
-
-* **Status:** Accepted
-* **Context:** Intercepting user inputs (keyboard/mouse) to drive the SLAM system (start, calibration, quit).
+* **Status:** Accepted (Revised)
+* **Context:** Intercepting user keyboard inputs to drive the SLAM pipeline states (START, CALIBRATE, QUIT). We initially considered an intermediate `Button` UI component to maintain state.
 * **Decision:** 
-  * Define an abstract intent enumeration `UserAction`.
-  * The View (`ControlPanel`) performs a single `cv::pollKey()` call per frame and updates the synchronous state of `Button` objects.
+  * Remove the intermediate `Button` state class.
+  * `ControlPanel` performs a single non-blocking `cv::pollKey()` call per frame and maps keycodes directly to the `UserAction` enumeration.
 * **Rationale:** 
-  * Prevents event loss in the operating system's event queue caused by scattered multiple key-polling calls.
-  * Guarantees zero direct dependency from the Controller onto the underlying GUI framework (OpenCV HighGUI).
+  * **YAGNI (You Ain't Gonna Need It):** In a real-time SLAM system, keyboard shortcuts provide optimal reactivity. Managing intermediate button state (`pressed = true/false`) within a single frame introduced unnecessary overhead and artificial complexity.
+  * **Performance & Simplicity:** Direct keycode translation avoids string comparisons and dynamic allocations while retaining zero dependency between the Controller and OpenCV HighGUI.
