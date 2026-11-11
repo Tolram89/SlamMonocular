@@ -16,8 +16,7 @@ struct FrameData {
     cv::Mat image;                                ///< Raw or preprocessed image frame.
     std::vector<cv::KeyPoint> keypoints;          ///< Extracted 2D interest points.
     cv::Mat descriptors;                          ///< ORB feature descriptors.
-    cv::Mat pose;                                 ///< 4x4 camera pose matrix SE(3).
-    std::vector<cv::DMatch> matches;              ///< Feature matches with previous frame.
+    cv::Mat globalPose;                                 ///< 4x4 camera pose matrix SE(3).
     std::shared_ptr<const Camera> camera;         ///< Shared immutable reference to sensor model.
 
     /**
