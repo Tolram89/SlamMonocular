@@ -47,3 +47,16 @@ This document lists the key architectural decisions and software design choices 
 * **Rationale:** 
   * **YAGNI (You Ain't Gonna Need It):** In a real-time SLAM system, keyboard shortcuts provide optimal reactivity. Managing intermediate button state (`pressed = true/false`) within a single frame introduced unnecessary overhead and artificial complexity.
   * **Performance & Simplicity:** Direct keycode translation avoids string comparisons and dynamic allocations while retaining zero dependency between the Controller and OpenCV HighGUI.
+
+---
+  ## ADR 005: Introduction of `DoubleFrameData` for Temporal Pair Processing
+
+* **Status:** Accepted
+* **Context:** Sequential visual odometry (`Tracking`) and triangulation (`Mapping`) require a pair of consecutive frames $(F_{t-1}, F_t)$. Passing two separate `FrameData` objects complicates method signatures, leaves the initial frame ($t = 0$) without a valid predecessor, and mixes single-frame state with pairwise geometric relations.
+* **Decision:**
+  * Introduce `DoubleFrameData` to encapsulate a consecutive pair of shared frame pointers (`std::shared_ptr<FrameData> previous` and `current`), their feature correspondences (`std::vector<cv::DMatch> matches`), and the incremental camera motion (`cv::Mat relativePose`).
+  * Keep single-frame attributes (`id`, `image`, `keypoints`, `descriptors`, and cumulative `globalPose`) inside `FrameData`.
+  * Instantiate `DoubleFrameData` inside `SlamSystem` only once at least two frames have been acquired ($t \ge 1$).
+* **Rationale:**
+  * **Boundary Condition Safety:** Eliminates special-case branching for the first frame ($t = 0$) in `Tracking` and `Mapping`.
+  * **Semantic & Memory Clarity:** Separates pairwise epipolar entities (`matches`, relative transform $T_{t-1 \rightarrow t}$) from absolute frame state ($T_{0 \rightarrow t}$), while avoiding deep copies of `std::vector<cv::KeyPoint>` via `std::shared_ptr`.
