@@ -5,14 +5,18 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(OpenCV REQUIRED)
+find_package(OpenGL REQUIRED)
+find_package(glfw3 CONFIG REQUIRED)
+find_package(glad CONFIG REQUIRED)
+find_package(glm CONFIG REQUIRED)
 
 add_library(slam_core STATIC
      src/Calibration.cpp src/Camera.cpp src/ControlPanel.cpp
     src/FrameData.cpp src/InterestPointExtractor.cpp src/Mapping.cpp src/MapWindow.cpp
     src/Preprocessing.cpp src/SlamSystem.cpp src/Tracking.cpp
-    src/UserInterface.cpp src/VideoStream.cpp src/VideoWindow.cpp)
+    src/UserInterface.cpp src/VideoStream.cpp src/VideoWindow.cpp src/OrbitCamera.cpp)
 target_include_directories(slam_core PUBLIC include ${OpenCV_INCLUDE_DIRS})
-target_link_libraries(slam_core PUBLIC ${OpenCV_LIBS})
+target_link_libraries(slam_core PUBLIC ${OpenCV_LIBS} OpenGL::GL glfw glad::glad glm::glm)
 
 add_executable(SlamMonocular src/main.cpp)
 target_link_libraries(SlamMonocular PRIVATE slam_core)
