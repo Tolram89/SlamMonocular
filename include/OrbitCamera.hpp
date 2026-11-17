@@ -10,13 +10,15 @@ private:
 	glm::vec3 target;
 
 	float normalizeAngle(float angle);
+	glm::vec3 getHorizontalForward() const;
 public:
 	OrbitCamera(float distance, float pitch);
 	
 	void rotate(float deltaYaw);
-	void moveForward(float deltaYaw);
-	void moveRight(float deltaYaw);
-	const glm::mat4& getViewMatrix() const;
+	void moveForward(float delta);
+	void moveRight(float delta);
+	glm::mat4 getViewMatrix() const;
+	
 
 
 };
