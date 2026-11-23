@@ -1,5 +1,6 @@
 #include <opencv2/opencv.hpp>
 #include <gtest/gtest.h>
+
 int simulated_key= -1;
 namespace cv{
 	int getSimulatedKey()

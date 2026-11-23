@@ -10,7 +10,7 @@
  */
 class VideoStream {
 private:
-    cv::VideoCapture capture; ///< Underlying OpenCV capture backend.
+    cv::VideoCapture videoCapture; ///< Underlying OpenCV capture backend.
 
 public:
     /**

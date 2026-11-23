@@ -14,7 +14,7 @@ add_library(slam_core STATIC
      src/Calibration.cpp src/Camera.cpp src/ControlPanel.cpp
     src/FrameData.cpp src/InterestPointExtractor.cpp src/Mapping.cpp src/MapWindow.cpp
     src/Preprocessing.cpp src/SlamSystem.cpp src/Tracking.cpp
-    src/UserInterface.cpp src/VideoStream.cpp src/VideoWindow.cpp src/OrbitCamera.cpp)
+    src/UserInterface.cpp src/VideoStream.cpp src/VideoWindow.cpp src/FreeCamera.cpp)
 target_include_directories(slam_core PUBLIC include ${OpenCV_INCLUDE_DIRS})
 target_link_libraries(slam_core PUBLIC ${OpenCV_LIBS} OpenGL::GL glfw glad::glad glm::glm)
 

@@ -20,5 +20,10 @@ target_compile_definitions(calibration_tests PRIVATE TEST_DATA_DIR="${CMAKE_CURR
 
 #test pour ControlPanel
 add_executable(controlPanel_tests test_controlPanel.cpp)
-target_link_libraries(controlPanel_tests PRIVATE ${OpenCV_LIBS} GTest::gtest_main)
+target_link_libraries(controlPanel_tests PRIVATE slam_core ${OpenCV_LIBS} GTest::gtest_main)
 gtest_discover_tests(controlPanel_tests)
+
+#test pour FreeCamera
+add_executable(freeCamera_tests test_freeCamera.cpp)
+target_link_libraries(freeCamera_tests PRIVATE slam_core ${OpenCV_LIBS} GTest::gtest_main)
+gtest_discover_tests(freeCamera_tests)
